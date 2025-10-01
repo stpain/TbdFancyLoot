@@ -626,11 +626,11 @@ function SettingsPanel:CreateSettingsUI()
             panel = self.TabPanel.Blacklist,
             width = 80,
         },
-        {
-            label = Locales[locale].TAB_LABEL_SEARCH,
-            panel = self.TabPanel.Search,
-            width = 80,
-        },
+        -- {
+        --     label = Locales[locale].TAB_LABEL_SEARCH,
+        --     panel = self.TabPanel.Search,
+        --     width = 80,
+        -- },
     }
 
     self.TabPanel:CreateTabButtons(tabs)
