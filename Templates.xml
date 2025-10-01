@@ -1,0 +1,66 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
+
+    <CheckButton name="MinimalCheckboxArtTemplate" virtual="true">
+		<NormalTexture parentKey="NormalTexture" atlas="checkbox-minimal" useAtlasSize="true"/>
+		<PushedTexture parentKey="PushedTexture" atlas="checkbox-minimal" useAtlasSize="true"/>
+		<HighlightTexture parentKey="HighlightTexture" atlas="checkbox-minimal" useAtlasSize="true" alphaMode="ADD"/>
+		<CheckedTexture parentKey="CheckedTexture" atlas="checkmark-minimal" useAtlasSize="true"/>
+		<DisabledCheckedTexture parentKey="DisabledCheckedTexture" atlas="checkmark-minimal-disabled" useAtlasSize="true"/>
+	</CheckButton>
+
+	<CheckButton name="MinimalCheckboxTemplate" inherits="MinimalCheckboxArtTemplate" virtual="true">
+		<Size x="30" y="29"/>
+	</CheckButton>
+
+
+
+    <Frame name="TbdFancyLootListItemTemplate" virtual="true" enableMouse="true">
+        <Size y="22"/>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture parentKey="Background" atlas="uitools-row-background-01" hidden="true">
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                        <Anchor point="BOTTOMRIGHT" x="-25"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+            <Layer level="OVERLAY">
+                <Texture parentKey="Icon">
+                    <Size x="20" y="20"/>
+                    <!-- <TexCoords left="0.05" right="0.95" top="0.05" bottom="0.95"/> -->
+                    <Anchors>
+                        <Anchor point="LEFT"/>
+                    </Anchors>
+                </Texture>
+                <FontString parentKey="Label" inherits="GameFontnormal">
+                    <!-- <Size x="300" y="22"/> -->
+                    <Anchors>
+                        <Anchor point="LEFT" x="24" y="0"/>
+                    </Anchors>
+                </FontString>
+            </Layer>
+            <Layer level="HIGHLIGHT">
+                <Texture parentKey="Hover" atlas="uitools-row-background-hover">
+                    <Anchors>
+                        <Anchor point="TOPLEFT"/>
+                        <Anchor point="BOTTOMRIGHT" x="-25"/>
+                    </Anchors>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button parentKey="Delete">
+                <NormalTexture atlas="common-icon-redx"/>
+                <!-- <PushedTexture atlas="128-RedButton-Delete-Pressed"/>
+                <HighlightTexture atlas="128-RedButton-Delete-Highlight"/> -->
+                <Size x="20" y="20"/>
+                <Anchors>
+                    <Anchor point="RIGHT" x="-25" y="0"/>
+                </Anchors>
+            </Button>
+        </Frames>
+    </Frame>
+    
+</Ui>
