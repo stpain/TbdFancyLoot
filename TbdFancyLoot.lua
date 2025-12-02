@@ -199,7 +199,225 @@ local WrathMetalAndStone = {
     [3861] = true,
 }
 
+local WrathGems = {
+    [36784] = true,
+    [7971] = true,
+    [42225] = true,
+    [36783] = true,
+    [36918] = true,
+    [13926] = true,
+    [36917] = true,
+    [36930] = true,
+    [36932] = true,
+    [36923] = true,
+    [5500] = true,
+    [36919] = true,
+    [1529] = true,
+    [36922] = true,
+    [5498] = true,
+    [36921] = true,
+    [7910] = true,
+    [12363] = true,
+    [36929] = true,
+    [1206] = true,
+    [12799] = true,
+    [1210] = true,
+    [36920] = true,
+    [36931] = true,
+    [36927] = true,
+    [23436] = true,
+    [36926] = true,
+    [12364] = true,
+    [12800] = true,
+    [45883] = true,
+    [23112] = true,
+    [36934] = true,
+    [12361] = true,
+    [818] = true,
+    [36928] = true,
+    [11382] = true,
+    [3864] = true,
+    [36933] = true,
+    [36924] = true,
+    [1705] = true,
+    [23439] = true,
+    [7909] = true,
+    [36925] = true,
+    [23079] = true,
+    [24478] = true,
+    [774] = true,
+    [24479] = true,
+    [45862] = true,
+    [23441] = true,
+    [45882] = true,
+    [45987] = true,
+    [23440] = true,
+    [23077] = true,
+    [30548] = true,
+    [23117] = true,
+    [32227] = true,
+    [32249] = true,
+    [45879] = true,
+    [45880] = true,
+    [21929] = true,
+    [30549] = true,
+    [23438] = true,
+    [30550] = true,
+    [32229] = true,
+    [30574] = true,
+    [30589] = true,
+    [23107] = true,
+    [30546] = true,
+    [30583] = true,
+    [30587] = true,
+    [30588] = true,
+    [30602] = true,
+    [32230] = true,
+    [30552] = true,
+    [32228] = true,
+    [30551] = true,
+    [45881] = true,
+    [23437] = true,
+    [30573] = true,
+    [30584] = true,
+    [30593] = true,
+    [30603] = true,
+    [30606] = true,
+    [30559] = true,
+    [30572] = true,
+    [30600] = true,
+    [30604] = true,
+    [41450] = true,
+    [41492] = true,
+    [41497] = true,
+    [24029] = true,
+    [30547] = true,
+    [30553] = true,
+    [30556] = true,
+    [30558] = true,
+    [30560] = true,
+    [30563] = true,
+    [30565] = true,
+    [30566] = true,
+    [30575] = true,
+    [30581] = true,
+    [30582] = true,
+    [30585] = true,
+    [30586] = true,
+    [30590] = true,
+    [30592] = true,
+    [30594] = true,
+    [30601] = true,
+    [30605] = true,
+    [30607] = true,
+    [32231] = true,
+    [41452] = true,
+    [41468] = true,
+    [30554] = true,
+    [30555] = true,
+    [30591] = true,
+    [30608] = true,
+    [32195] = true,
+    [34831] = true,
+    [41466] = true,
+    [30564] = true,
+}
+
+local WrathSkins = {
+    [44128] = true,
+    [8170] = true,
+    [38425] = true,
+    [4304] = true,
+    [21887] = true,
+    [38558] = true,
+    [33568] = true,
+    [4234] = true,
+    [25700] = true,
+    [38557] = true,
+    [38561] = true,
+    [2319] = true,
+    [4235] = true,
+    [2318] = true,
+    [8150] = true,
+    [8154] = true,
+    [4461] = true, 
+    [2934] = true,
+    [4232] = true,
+    [8165] = true,
+    [15409] = true, 
+    [23793] = true,
+    [783] = true,
+    [8167] = true,
+    [25649] = true,
+    [5784] = true,
+    [7392] = true,
+    [29548] = true,
+    [4236] = true,
+    [29539] = true,
+    [4233] = true, 
+    [4289] = true,
+    [12810] = true,
+    [15407] = true,
+    [17012] = true, 
+    [29547] = true,
+    [8172] = true,
+    [15416] = true, 
+    [15419] = true, 
+    [33567] = true, 
+    [15417] = true,
+    [15415] = true, 
+    [25699] = true,
+    [25707] = true,
+    [6471] = true,
+    [15408] = true,
+    [20498] = true,
+    [20381] = true,
+    [8171] = true,
+    [4231] = true,
+    [6470] = true,
+    [8168] = true,
+    [15412] = true,
+    [25708] = true,
+    [5082] = true,
+    [5785] = true,
+    [15410] = true,
+    [7286] = true,
+    [8169] = true,
+    [17967] = true,
+    [19768] = true,
+    [20501] = true,
+    [15414] = true,
+    [20500] = true,
+    [36987] = true,
+    [49334] = true,
+    [19767] = true, 
+    [5116] = true,
+}
+
 local LootItemFramePool;
+
+local function ScanPlayerBags()
+
+    local ret = {
+        numSlotsFree = 0,
+        items = {},
+    }
+
+    for bag = 0, 4 do
+        for slot = 1, C_Container.GetContainerNumSlots(bag) do
+            local slotInfo = C_Container.GetContainerItemInfo(bag, slot)
+            if slotInfo == nil then
+                ret.numSlotsFree = ret.numSlotsFree + 1
+            else
+                if slotInfo.itemID then
+                    
+                end
+            end
+        end
+    end
+
+    return ret;
+end
 
 local function SortLoot(loot)
     table.sort(loot, function(a, b)
@@ -227,6 +445,14 @@ local function SortLoot(loot)
     end)
 end
 
+local function RemoveLootSlotFrame(index)
+    for frame in LootItemFramePool:EnumerateActive() do
+        if frame.lootSlotData and (frame.lootSlotData.index == index) then
+            LootItemFramePool:Release(frame)
+        end
+    end
+end
+
 --[[
     TODO:
     iter the pool, add frames to a local table
@@ -248,11 +474,15 @@ local function UpdateLootFramePositions()
     end
 end
 
-local function CheckAutoLootRules(itemID, isQuestItem)
+local function CheckAutoLootRules(itemID, isQuestItem, itemQuality)
 
     local config = TbdFancyLootOptions;
 
     if (config.autoLootQuestItems == true) and (isQuestItem == true) then
+        return true
+    end
+
+    if itemQuality > 1 then
         return true
     end
 
@@ -280,6 +510,18 @@ local function CheckAutoLootRules(itemID, isQuestItem)
         end
     end
 
+    if config.autoLootGems == true then
+        if WrathGems[itemID] then
+            return true
+        end
+    end
+
+    if config.autoLootSkins == true then
+        if WrathSkins[itemID] then
+            return true
+        end
+    end
+
     for _itemID, autoLoot in pairs(config.autoLootWhiteList) do
         if _itemID == itemID then
             return true
@@ -292,35 +534,59 @@ end
 
 local function GetTargetLoot()
 
-
-    local t = {}
-
+    --local playerBagInfo = ScanPlayerBags()
 	-- if currencyID then 
 	-- 	item, texture, quantity, itemQuality = CurrencyContainerUtil.GetCurrencyContainerInfo(currencyID, quantity, item, texture, itemQuality);
 	-- end
+
+    local t = {}
+    local link, itemName, equipLoc, itemID, classID, subClassID, texture, quantity, currencyID, itemQuality, isQuestItem, questID, locked, startsQuest
+    local showLoot, shouldAutoLoot, isBlackList
 
     local numLoot = GetNumLootItems()
     for i = 1, numLoot do
         if LootSlotHasItem(i) then
 
-            local texture, item, quantity, currencyID, itemQuality, locked, isQuestItem, questID, isActive = GetLootSlotInfo(i)
+            texture, itemName, quantity, currencyID, itemQuality, locked, isQuestItem, questID, startsQuest = GetLootSlotInfo(i)
             
-            if GetLootSlotType(i) == 1 then
+            if GetLootSlotType(i) == Enum.LootSlotType.Item then
                 
-                local link = GetLootSlotLink(i)
-                local itemID, _, _, equipLoc, _, classID, subClassID = C_Item.GetItemInfoInstant(link)
+                link = GetLootSlotLink(i)
+                itemID, _, _, equipLoc, _, classID, subClassID = C_Item.GetItemInfoInstant(link)
 
-                local showLoot = true;
-                if CheckAutoLootRules(itemID, isQuestItem) == true then
-                    LootSlot(i)
-                    showLoot = false;
-                end
-                
-                local isBlackList = false;
+                showLoot = true;
+                shouldAutoLoot = CheckAutoLootRules(itemID, isQuestItem, itemQuality)
+
+                --LootSlot(i)
+
+                isBlackList = false;
                 if TbdFancyLootOptions and (type(TbdFancyLootOptions.autoLootBlackList) == "table") and (TbdFancyLootOptions.autoLootBlackList[itemID] == true) then
                     isBlackList = true
                 end
-                if (showLoot == true) and (isBlackList == false) then
+
+                --[[
+                if (isBlackList == false) and (playerBagInfo.numSlotsFree > 0) and (shouldAutoLoot == true) then
+                    LootSlot(i)
+                    playerBagInfo = ScanPlayerBags() --get new bag info, kinda sucks but for now just full scan the bags
+                    showLoot = false;
+                end
+                ]]
+
+                if (isBlackList == true) then
+                    --do nothing
+                    showLoot = false
+                else
+                    if (shouldAutoLoot == true) then
+
+                        --there are a few reasons why looting could fail
+                        --leave the showLoot flag as true, when the slot is cleared it'll clean up the UI
+                        --could maybe try to mask the show/hide if its unsightly
+                        LootSlot(i)
+                    end
+                end
+
+
+                if (showLoot == true) then
                     table.insert(t, {
                         link = link,
                         itemID = itemID,
@@ -336,7 +602,7 @@ local function GetTargetLoot()
                     })
                 end
 
-            elseif GetLootSlotType(i) == 2 then
+            elseif GetLootSlotType(i) == Enum.LootSlotType.Money then
 
                 local info = GetLootInfo()
                 if info[1] and info[1].item then
@@ -379,103 +645,18 @@ end
 
 
 
-TbdFancyLootPersonalLootItemMixin = {}
-function TbdFancyLootPersonalLootItemMixin:OnLoad()
-    self:SetScript("OnLeave", function()
-        GameTooltip_SetDefaultAnchor(GameTooltip, UIParent)
-    end)
-end
-
-function TbdFancyLootPersonalLootItemMixin:SetLootItem(data)
-
-    self.lootSlotData = data;
-
-    if data.link then
-
-        local itemID, _, _, _, icon, classID, subClassID = C_Item.GetItemInfoInstant(data.link)
-
-        local item = Item:CreateFromItemLink(data.link)
-        if not item:IsItemEmpty() then
-            item:ContinueOnItemLoad(function()
-
-                local qualityColour = item:GetItemQualityColor()
-
-                if data.quantity > 1 then
-                    self.Label:SetText(string.format("x%d %s%s|r", data.quantity, qualityColour.hex, item:GetItemName()))
-                else
-                    self.Label:SetText(string.format("%s%s|r", qualityColour.hex, item:GetItemName()))
-                end
-                local vendorPrice = select(11, C_Item.GetItemInfo(data.link))
-                self.ItemVendorPriceLabel:SetText(C_CurrencyInfo.GetCoinTextureString(vendorPrice * data.quantity))
-            end)
-        end
-
-        --self.ItemClassLabel:SetText(string.format("|cffffffff%s - %s", C_Item.GetItemClassInfo(classID), C_Item.GetItemSubClassInfo(classID, subClassID)))
-        self.ItemClassLabel:SetText(string.format("|cffffffff%s", C_Item.GetItemSubClassInfo(classID, subClassID)))
-
-        self:SetScript("OnEnter", function()
-            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-            GameTooltip:ClearLines()
-            GameTooltip:SetHyperlink(data.link)
-            GameTooltip:Show()
-
-            --DevTools_Dump({data})
-        end)
-    end
-    if data.icon then
-        self.Icon:SetTexture(data.icon)
-    end
-    if data.copper then
-        self.Label:SetText(C_CurrencyInfo.GetCoinTextureString(data.copper))
-    end
-    if data.isQuestItem then
-        self.RightIcon:SetAtlas("QuestNormal")
-    end
-    if data.index then
-        self:SetScript("OnMouseUp", function(_, hardwareButton)
-            if hardwareButton == "RightButton" then
-
-                if IsAltKeyDown() then
-                    TbdFancyLoot.Api.UpdateList("autoLootWhiteList", {data.itemID})
-
-                    --loot this as its now whitelisted
-                    LootItemFramePool:Release(self)
-                    LootSlot(data.index)
-                end
-
-                if IsControlKeyDown() then
-                    TbdFancyLoot.Api.UpdateList("autoLootBlackList", {data.itemID})
-                end
-
-            else
-                LootItemFramePool:Release(self)
-                LootSlot(data.index)
-            end
-        end)
-    end
-end
-
-function TbdFancyLootPersonalLootItemMixin:Clear()
-    self.Icon:SetTexture(nil)
-    self.RightIcon:SetTexture(nil)
-    self.Label:SetText(nil)
-    self.ItemClassLabel:SetText(nil)
-    self.ItemVendorPriceLabel:SetText(nil)
-    self:SetScript("OnMouseUp", nil)
-    self.lootSlotData = nil
-end
 
 
 
-
-
-
-
+--[[
+    Main Loot Window
+]]
 
 local Events = {
     "LOOT_OPENED",
     "LOOT_CLOSED",
     "LOOT_SLOT_CLEARED",
+    --"BAG_UPDATE"
 }
 
 TbdFancyLootPersonalLootMixin = {}
@@ -539,11 +720,12 @@ end
 local lastSlotCleared;
 function TbdFancyLootPersonalLootMixin:LOOT_SLOT_CLEARED(...)
     local slotIndex = ...;
-    --avoid a double call due to events firing more than once
+    --avoid a double call due to events firing twice
     if slotIndex == lastSlotCleared then
         return
     end
     lastSlotCleared = slotIndex
+    RemoveLootSlotFrame(slotIndex)
     UpdateLootFramePositions()
 end
 

@@ -2,6 +2,10 @@
 
 local addonName, TbdFancyLoot = ...;
 
+
+--[[
+    Helper Factory Functions
+]]
 local function CreateListbox(parent, name)
     local Listbox = CreateFrame("Frame")
     Listbox:SetParent(parent)
@@ -32,9 +36,10 @@ end
 
 local function CreateInputbox(parent, helptip)
     local Inputbox = CreateFrame("EditBox", nil, parent, "InputBoxTemplate")
-    Inputbox.Helptip = Inputbox:CreateFontString(nil, "ARTWORK", "GameFontNormalGraySmall")
+    Inputbox.Helptip = Inputbox:CreateFontString(nil, "ARTWORK", "GameFontNormalSmall")
     Inputbox.Helptip:SetPoint("LEFT", 5, 0)
     Inputbox.Helptip:SetText(helptip)
+    Inputbox.Helptip:SetTextColor(0.5,0.5,0.5)
     Inputbox:SetAutoFocus(false)
     Inputbox:SetScript("OnTextChanged", function()
         if Inputbox:GetText() == "" then
@@ -51,29 +56,6 @@ local function CreateInputbox(parent, helptip)
     return Inputbox
 end
 
---https://warcraft.wiki.gg/wiki/ItemType
-local classIdOrder = {
-    [0] = 6, --consumable
-    [1] = 6, --container
-    [2] = 6, --weapon
-    [3] = 6, --gem
-    [4] = 6, --armor
-    [5] = 6, --reagent
-    [6] = 6, --ammo
-    [7] = 6, --trade
-    [8] = 6, --item enhance
-    [9] = 6, --recipe
-    [10] = 6, --token
-    [11] = 6, --quiver
-    [12] = 6, --quest
-    [13] = 6, --key
-    [14] = 6, --permanent
-    [15] = 6, --misc
-    [16] = 6, --glyph
-    [17] = 6, --battlepets
-    [18] = 6, --wow token
-    [19] = 6, --profession
-}
 
 local TabNineSlice = {
     TopLeftCorner =	{ atlas = "optionsframe-nineslice-cornertopleft", x = -10, y = 12, },
@@ -96,43 +78,13 @@ Callbacks:GenerateCallbackEvents({
     "Whitelist_OnChanged",
 })
 
-local Locales = {
-    enUS = {
-        TAB_LABEL_AUTO_LOOT = "Auto loot",
-        TAB_LABEL_AUTO_LOOT_TRADESKILLS = "Tradeskills",
-        --TAB_LABEL_AUTO_ROLL = "Auto rolls",
-        TAB_LABEL_WHITELIST = "Whitelist",
-        TAB_LABEL_BLACKLIST = "Blacklist",
-        TAB_LABEL_SEARCH = "Search",
-
-        TAB_DESC_AUTO_LOOT = "Control which items are automatically looted. Sometimes quest items don't show as quest items via the game API, you can use the Whitelist to auto loot these.",
-        TAB_DESC_AUTO_LOOT_TRADESKILLS = "Select which tradeskill items should be auto looted.",
-        TAB_DESC_AUTO_ROLL = "Select items to be auto looted.\n|cffFFD200Some quests involve collecting items which the game doesn't mark as 'Quest Items' for these you can Whitelist them while on the quest.|r",
-        TAB_DESC_WHITELIST = "Whitelist items will be automatically looted. You can |cffFFD200Alt+Right Click|r the loot frame to add items or use the input box to add itemID's, add multiple using a ',' (csv)",
-        TAB_DESC_BLACKLIST = "Blacklist items will not be shown or looted. You can |cffFFD200Ctrl+Right Click|r the loot frame to add items or use the input box to add itemID's, add multiple using a ',' (csv)",
-        TAB_DESC_SEARCH = "",
-
-        AUTO_LOOT_GOLD = "Gold",
-        AUTO_LOOT_DUST_AND_SHARDS = "Enchanting Dust & Shards",
-        AUTO_LOOT_HERBS = "Herbs",
-        AUTO_LOOT_CLOTH = "Cloth",
-        AUTO_LOOT_ORE_AND_STONE = "Ore and Stone",
-        AUTO_LOOT_SKINS = "Skins",
-        AUTO_LOOT_QUEST_ITEMS = "Quest Items",
-        AUTO_LOOT_WHITE_LIST_ITEMS = "Auto Loot white list",
-        AUTO_LOOT_BLACK_LIST_ITEMS = "Auto Loot black list",
-
-
-    }
-}
-
-local locale = GetLocale() or "enUS";
 
 local ConfigDefaults = {
     autoLootGold = true,
     autoLootCloth = true,
     autoLootEnchantingDustShards = true,
     autoLootOreAndStone = true,
+    autoLootGems = true,
     autoLootHerbs = true,
     autoLootSkins = true,
     autoLootQuestItems = true,
@@ -186,8 +138,6 @@ function TbdFancyLoot.Api.UpdateList(list, items, remove)
                 end
             end
 
-            --DevTools_Dump({TbdFancyLootOptions[list]})
-
             --only need to update the shown list
             if list == "autoLootBlackList" then
                 Callbacks:TriggerEvent("Blacklist_OnChanged")
@@ -197,8 +147,6 @@ function TbdFancyLoot.Api.UpdateList(list, items, remove)
         end
     end
 end
-
---local dummyData = {4278, 3858, 6993, 18562, 3340, 2772, 2771, 10620, 11370, 2775, 5866, 2770, 7911, 2776, 5833, 2798, 5842, 6992, 6800, 6808, 9261, 11099, 5460, 5733}
 
 function TbdFancyLoot.Api.GetList(list)
     if TbdFancyLootOptions and type(TbdFancyLootOptions[list]) == "table" then
@@ -210,7 +158,6 @@ function TbdFancyLoot.Api.GetList(list)
     end
 end
 
--- end
 
 
 
@@ -311,6 +258,14 @@ logoBorder:SetAtlas("charactercreate-ring-metallight")
 logoBorder:SetPoint("CENTER", logo, "CENTER", 0, -2)
 logoBorder:SetSize(210, 210)
 
+local infoAbout = SettingsPanel:CreateFontString(nil, "OVERLAY", "GameFontWhite")
+infoAbout:SetPoint("TOPLEFT", 12, -70)
+infoAbout:SetPoint("TOPRIGHT", logo, "TOPLEFT", -20, 0)
+infoAbout:SetHeight(100)
+infoAbout:SetJustifyH("LEFT")
+infoAbout:SetJustifyV("TOP")
+infoAbout:SetText(TbdFancyLoot.Locales.INFO_ABOUT)
+
 SettingsPanel:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 SettingsPanel:SetScript("OnEvent", function(self, event, ...)
@@ -321,48 +276,50 @@ end)
 
 
 function SettingsPanel:PLAYER_ENTERING_WORLD(...)
-
-    --local isInitial, isReload = ...;
-
     if TbdFancyLootOptions == nil then
         TbdFancyLootOptions = {}
     end
-
     Initialize()
-
 end
 
+
+
+--Settings UI tables
 local autoLootCheckboxes = {
     {
         setting = "autoLootGold",
-        label = Locales[locale].AUTO_LOOT_GOLD,
+        label = TbdFancyLoot.Locales.AUTO_LOOT_GOLD,
     },
     {
         setting = "autoLootQuestItems",
-        label = Locales[locale].AUTO_LOOT_QUEST_ITEMS,
+        label = TbdFancyLoot.Locales.AUTO_LOOT_QUEST_ITEMS,
     },
 }
 
 local autoLootTradeskillsCheckboxes = {
     {
         setting = "autoLootEnchantingDustShards",
-        label = Locales[locale].AUTO_LOOT_DUST_AND_SHARDS,
+        label = TbdFancyLoot.Locales.AUTO_LOOT_DUST_AND_SHARDS,
     },
     {
         setting = "autoLootOreAndStone",
-        label = Locales[locale].AUTO_LOOT_ORE_AND_STONE,
+        label = TbdFancyLoot.Locales.AUTO_LOOT_ORE_AND_STONE,
+    },
+    {
+        setting = "autoLootGems",
+        label = TbdFancyLoot.Locales.AUTO_LOOT_GEMS,
     },
     {
         setting = "autoLootHerbs",
-        label = Locales[locale].AUTO_LOOT_HERBS,
+        label = TbdFancyLoot.Locales.AUTO_LOOT_HERBS,
     },
     {
         setting = "autoLootCloth",
-        label = Locales[locale].AUTO_LOOT_CLOTH,
+        label = TbdFancyLoot.Locales.AUTO_LOOT_CLOTH,
     },
     {
         setting = "autoLootSkins",
-        label = Locales[locale].AUTO_LOOT_SKINS,
+        label = TbdFancyLoot.Locales.AUTO_LOOT_SKINS,
     },
 }
 
@@ -382,7 +339,7 @@ function SettingsPanel:CreateSettingsUI()
     self.TabPanel.AutoLoot = CreateFrame("Frame", nil, self.TabPanel)
     self.TabPanel.AutoLoot:SetAllPoints()
 
-    CreateTabDescription(self.TabPanel.AutoLoot, Locales[locale].TAB_DESC_AUTO_ROLL)
+    CreateTabDescription(self.TabPanel.AutoLoot, TbdFancyLoot.Locales.TAB_DESC_AUTO_ROLL)
 
     local lastCheckBox;
     for k, checkbox in ipairs(autoLootCheckboxes) do
@@ -421,7 +378,7 @@ function SettingsPanel:CreateSettingsUI()
     self.TabPanel.AutoLootTradeskills:SetAllPoints()
     self.TabPanel.AutoLootTradeskills:Hide()
 
-    CreateTabDescription(self.TabPanel.AutoLootTradeskills, Locales[locale].TAB_DESC_AUTO_LOOT_TRADESKILLS)
+    CreateTabDescription(self.TabPanel.AutoLootTradeskills, TbdFancyLoot.Locales.TAB_DESC_AUTO_LOOT_TRADESKILLS)
 
     lastCheckBox = nil;
     for k, checkbox in ipairs(autoLootTradeskillsCheckboxes) do
@@ -461,6 +418,7 @@ function SettingsPanel:CreateSettingsUI()
         Both white and black list can use this init func
     ]]
 
+    --use this to determine the active list
     self.TabPanel.Selectedlist = nil;
     local function RemoveItemFromList(itemID)
         if self.TabPanel.Selectedlist then
@@ -490,6 +448,7 @@ function SettingsPanel:CreateSettingsUI()
         end
     end
 
+    --frames are passed an itemID as data
     local function LoadListItem(frame, data)
         --print("ItemID:", data)
         local item = Item:CreateFromItemID(data)
@@ -532,7 +491,7 @@ function SettingsPanel:CreateSettingsUI()
     self.TabPanel.Whitelist:SetAllPoints()
     self.TabPanel.Whitelist:Hide()
 
-    CreateTabDescription(self.TabPanel.Whitelist, Locales[locale].TAB_DESC_WHITELIST)
+    CreateTabDescription(self.TabPanel.Whitelist, TbdFancyLoot.Locales.TAB_DESC_WHITELIST)
 
     self.TabPanel.Whitelist.InputBox = CreateInputbox(self.TabPanel.Whitelist, "Try 1234,3456")
     self.TabPanel.Whitelist.InputBox:SetPoint("TOPLEFT", 20, -65)
@@ -570,7 +529,7 @@ function SettingsPanel:CreateSettingsUI()
     self.TabPanel.Blacklist:SetAllPoints()
     self.TabPanel.Blacklist:Hide()
 
-    CreateTabDescription(self.TabPanel.Blacklist, Locales[locale].TAB_DESC_BLACKLIST)
+    CreateTabDescription(self.TabPanel.Blacklist, TbdFancyLoot.Locales.TAB_DESC_BLACKLIST)
 
     self.TabPanel.Blacklist.InputBox = CreateInputbox(self.TabPanel.Blacklist, "Try 1234,3456")
     self.TabPanel.Blacklist.InputBox:SetPoint("TOPLEFT", 20, -65)
@@ -602,32 +561,32 @@ function SettingsPanel:CreateSettingsUI()
     
     local tabs = {
         {
-            label = Locales[locale].TAB_LABEL_AUTO_LOOT,
+            label = TbdFancyLoot.Locales.TAB_LABEL_AUTO_LOOT,
             panel = self.TabPanel.AutoLoot,
             width = 80,
         },
         {
-            label = Locales[locale].TAB_LABEL_AUTO_LOOT_TRADESKILLS,
+            label = TbdFancyLoot.Locales.TAB_LABEL_AUTO_LOOT_TRADESKILLS,
             panel = self.TabPanel.AutoLootTradeskills,
             width = 80,
         },
         -- {
-        --     label = Locales[locale].TAB_LABEL_AUTO_ROLL,
+        --     label = TbdFancyLoot.Locales.TAB_LABEL_AUTO_ROLL,
         --     panel = self.TabPanel.AutoRoll,
         --     width = 80,
         -- },
         {
-            label = Locales[locale].TAB_LABEL_WHITELIST,
+            label = TbdFancyLoot.Locales.TAB_LABEL_WHITELIST,
             panel = self.TabPanel.Whitelist,
             width = 80,
         },
         {
-            label = Locales[locale].TAB_LABEL_BLACKLIST,
+            label = TbdFancyLoot.Locales.TAB_LABEL_BLACKLIST,
             panel = self.TabPanel.Blacklist,
             width = 80,
         },
         -- {
-        --     label = Locales[locale].TAB_LABEL_SEARCH,
+        --     label = TbdFancyLoot.Locales.TAB_LABEL_SEARCH,
         --     panel = self.TabPanel.Search,
         --     width = 80,
         -- },

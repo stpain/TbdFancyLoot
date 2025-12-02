@@ -1,5 +1,5 @@
 ## Name: TbdFancyLoot
-## Version: 1.0
+## Version: 1.1
 ## Interface: 11507
 ## Notes: 
 ## SavedVariables: TbdFancyLootOptions
@@ -10,7 +10,7 @@
 Locales.lua
 
 Templates.lua
-Templates.xml
+Templates_Classic.xml
 
 Options.lua
 
