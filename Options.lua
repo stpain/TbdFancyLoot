@@ -68,6 +68,20 @@ local TabNineSlice = {
     RightEdge = { atlas = "!OptionsFrame-NineSlice-EdgeRight", },
 }
 
+if WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
+    TabNineSlice = {
+		["TopRightCorner"] = { atlas = "Tooltip-NineSlice-CornerTopRight" },
+		["TopLeftCorner"] = { atlas = "Tooltip-NineSlice-CornerTopLeft" },
+		["BottomLeftCorner"] = { atlas = "Tooltip-NineSlice-CornerBottomLeft" },
+		["BottomRightCorner"] = { atlas = "Tooltip-NineSlice-CornerBottomRight" },
+		["TopEdge"] = { atlas = "_Tooltip-NineSlice-EdgeTop" },
+		["BottomEdge"] = { atlas = "_Tooltip-NineSlice-EdgeBottom" },
+		["LeftEdge"] = { atlas = "!Tooltip-NineSlice-EdgeLeft" },
+		["RightEdge"] = { atlas = "!Tooltip-NineSlice-EdgeRight" },
+		["Center"] = { layer = "BACKGROUND", atlas = "Tooltip-NineSlice-Center", x = -4, y = 4, x1 = 4, y1 = -4 },
+	};
+end
+
 local Callbacks = CreateFromMixins(CallbackRegistryMixin)
 Callbacks:OnLoad()
 Callbacks:GenerateCallbackEvents({
@@ -221,6 +235,10 @@ local function Initialize()
         UpdateDefaultConfig()
         Callbacks:TriggerEvent("OnSettingsLoaded")
         isInitialized = true;
+
+        if ViragDevTool_AddData then
+            ViragDevTool_AddData(TbdFancyLootOptions, addonName)
+        end
     end
 end
 

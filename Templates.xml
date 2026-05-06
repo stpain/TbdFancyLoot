@@ -6,7 +6,8 @@ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
         <Size y="22"/>
         <Layers>
             <Layer level="BACKGROUND">
-                <Texture parentKey="Background" atlas="uitools-row-background-01" hidden="true">
+                <Texture parentKey="Background" hidden="true">
+                    <Color r="0.140" g="0.503" b="0.554" a="0.15"/>
                     <Anchors>
                         <Anchor point="TOPLEFT"/>
                         <Anchor point="BOTTOMRIGHT" x="-25"/>
@@ -29,7 +30,8 @@ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
                 </FontString>
             </Layer>
             <Layer level="HIGHLIGHT">
-                <Texture parentKey="Hover" atlas="uitools-row-background-hover">
+                <Texture parentKey="Hover">
+                    <Color r="0.808" g="0.882" b="0.949" a="0.05"/>
                     <Anchors>
                         <Anchor point="TOPLEFT"/>
                         <Anchor point="BOTTOMRIGHT" x="-25"/>

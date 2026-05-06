@@ -419,6 +419,20 @@ local function ScanPlayerBags()
     return ret;
 end
 
+local function PlayerHasAvailableSlot()
+    for bag = 0, 4 do
+        local containerName = C_Container.GetBagName(bag);
+        if containerName:find("Quiver", nil, true) or containerName:find("Ammo", nil, true) then
+            --skip these
+        else
+            if (#C_Container.GetContainerFreeSlots(bag) > 0) then
+                return true;
+            end
+        end
+    end
+    return false;
+end
+
 local function SortLoot(loot)
     table.sort(loot, function(a, b)
         if a.classID and b.classID then
@@ -453,23 +467,36 @@ local function RemoveLootSlotFrame(index)
     end
 end
 
---[[
-    TODO:
-    iter the pool, add frames to a local table
-    loop the frames to perform a sort func
-    loop again to anchor and position
-]]
+
 
 local function UpdateLootFramePositions()
-    local lastFrame;
+    local startFrame, lastFrame;
+    local count = 0;
     for frame in LootItemFramePool:EnumerateActive() do
+        count = count + 1;
         frame:ClearAllPoints()
+
+        --no previous frames so set base point
         if lastFrame == nil then
             frame:SetPoint("BOTTOM", 0, 0)
+
+            --keep frame reference
             lastFrame = frame;
+            startFrame = frame;
         else
-            frame:SetPoint("BOTTOM", lastFrame, "TOP", 0, 0)
-            lastFrame = frame
+
+            --if we have more than 4 items start new column
+            if count == 5 then
+                frame:SetPoint("LEFT", startFrame, "RIGHT", 5, 0)
+                count = 0;
+                lastFrame = frame;
+
+                --reset colum start frame
+                startFrame = frame;
+            else
+                frame:SetPoint("BOTTOM", lastFrame, "TOP", 0, 0)
+                lastFrame = frame
+            end
         end
     end
 end
@@ -541,7 +568,7 @@ local function GetTargetLoot()
 
     local t = {}
     local link, itemName, equipLoc, itemID, classID, subClassID, texture, quantity, currencyID, itemQuality, isQuestItem, questID, locked, startsQuest
-    local showLoot, shouldAutoLoot, isBlackList
+    local showLoot, shouldAutoLoot, isBlackList, currentItemCount;
 
     local numLoot = GetNumLootItems()
     for i = 1, numLoot do
@@ -581,7 +608,29 @@ local function GetTargetLoot()
                         --there are a few reasons why looting could fail
                         --leave the showLoot flag as true, when the slot is cleared it'll clean up the UI
                         --could maybe try to mask the show/hide if its unsightly
-                        LootSlot(i)
+
+                        --ConfirmLootSlot(slot) BoP
+                        if PlayerHasAvailableSlot() == true then
+                            LootSlot(i)
+                            showLoot = false;
+                            --print("player has slot available")
+                        else
+                            --this loot item should be shown to the player
+
+                            currentItemCount = C_Item.GetItemCount(link)
+                            if (currentItemCount > 0) then
+                                LootSlot(i);
+                                showLoot = false;
+                            end
+
+
+                            showLoot = true;
+                            --print("no slots available")
+                        end
+
+                    else
+                        --print("not auto loot")
+                        showLoot = true;
                     end
                 end
 
@@ -669,7 +718,6 @@ function TbdFancyLootPersonalLootMixin:OnLoad()
     end
 
     local LootItemResetFunc = function(_, frame)
-        frame.lootSlotData = nil
         frame:Clear()
         frame:ClearAllPoints()
         frame:Hide()
@@ -682,6 +730,10 @@ function TbdFancyLootPersonalLootMixin:OnLoad()
         local uiScale, x, y = UIParent:GetEffectiveScale(), GetCursorPosition()
         self:ClearAllPoints()
         self:SetPoint("BOTTOMRIGHT", nil, "BOTTOMLEFT", x / uiScale, y / uiScale)
+    end)
+
+    hooksecurefunc("LootSlot", function(slotIndex)
+        print("LootSlot_HookFunc:", slotIndex)
     end)
 
 end
@@ -736,15 +788,26 @@ end
 
 function TbdFancyLootPersonalLootMixin:LOOT_OPENED(...)
 
-    lastSlotCleared = nil
-
-    self.currentCopper = GetMoney()
-
     local autoLoot, isFromItem = ...;
 
-    LootFrame:ClearAllPoints()
-    LootFrame:SetClampedToScreen(false)
-    LootFrame:SetPoint("RIGHT", UIParent, "LEFT", -10, 0)
+    if IsInGroup() then
+        
+    else
+
+        if (autoLoot == false) then
+            
+            lastSlotCleared = nil
+            
+            LootFrame:ClearAllPoints()
+            LootFrame:SetClampedToScreen(false)
+            LootFrame:SetPoint("RIGHT", UIParent, "LEFT", -10, 0)
+            
+            self:LoadLoot()
+        end
+
+    end
+
+    self.currentCopper = GetMoney()
 
     -- local target = UnitName("target") or ""
     -- local mapID = C_Map.GetBestMapForUnit("player")
@@ -754,10 +817,4 @@ function TbdFancyLootPersonalLootMixin:LOOT_OPENED(...)
     -- else
     --     mapName = GetMinimapZoneText()
     -- end
-
-    if autoLoot then
-        
-    else
-        self:LoadLoot()
-    end
 end

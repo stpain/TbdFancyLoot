@@ -1,6 +1,6 @@
 ## Name: TbdFancyLoot
-## Version: 1.0
-## Interface: 11507
+## Version: 1.2
+## Interface: 11508, 20505
 ## Notes: 
 ## SavedVariables: TbdFancyLootOptions
 ## Dependencies: TbdWidgets
@@ -11,6 +11,7 @@ Locales.lua
 
 Templates.lua
 Templates.xml
+Templates_Classic.xml [AllowLoadGameType vanilla]
 
 Options.lua
 
