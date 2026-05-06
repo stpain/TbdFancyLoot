@@ -1,5 +1,5 @@
 ## Name: TbdFancyLoot
-## Version: 1.2
+## Version: 1.21
 ## Interface: 11508, 20505
 ## Notes: 
 ## SavedVariables: TbdFancyLootOptions
