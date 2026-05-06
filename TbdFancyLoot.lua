@@ -732,9 +732,9 @@ function TbdFancyLootPersonalLootMixin:OnLoad()
         self:SetPoint("BOTTOMRIGHT", nil, "BOTTOMLEFT", x / uiScale, y / uiScale)
     end)
 
-    hooksecurefunc("LootSlot", function(slotIndex)
-        print("LootSlot_HookFunc:", slotIndex)
-    end)
+    --hooksecurefunc("LootSlot", function(slotIndex)
+        --print("LootSlot_HookFunc:", slotIndex)
+    --end)
 
 end
 
