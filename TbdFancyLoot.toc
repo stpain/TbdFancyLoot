@@ -1,7 +1,7 @@
 ## Name: TbdFancyLoot
 ## Version: 1.22
-## Interface: 11508, 20505
-## Notes: 
+## Interface: 11508, 16001, 20505
+## Notes: Looting stuff, made easy
 ## SavedVariables: TbdFancyLootOptions
 ## Dependencies: TbdWidgets
 
@@ -11,7 +11,7 @@ Locales.lua
 
 Templates.lua
 Templates.xml
-Templates_Classic.xml [AllowLoadGameType vanilla]
+# Templates_Classic.xml [AllowLoadGameType vanilla]
 
 Options.lua
 

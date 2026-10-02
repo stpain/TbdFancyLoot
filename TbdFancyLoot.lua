@@ -422,11 +422,13 @@ end
 local function PlayerHasAvailableSlot()
     for bag = 0, 4 do
         local containerName = C_Container.GetBagName(bag);
-        if containerName:find("Quiver", nil, true) or containerName:find("Ammo", nil, true) then
-            --skip these
-        else
-            if (#C_Container.GetContainerFreeSlots(bag) > 0) then
-                return true;
+        if containerName then
+            if containerName:find("Quiver", nil, true) or containerName:find("Ammo", nil, true) then
+                --skip these
+            else
+                if (#C_Container.GetContainerFreeSlots(bag) > 0) then
+                    return true;
+                end
             end
         end
     end
@@ -499,6 +501,17 @@ local function UpdateLootFramePositions()
             end
         end
     end
+end
+
+local function IsItemOfType(itemID, itemType, itemSubType)
+    local _, _itemType, _itemSubType, equipLoc, icon, classID, subClassID = C_Item.GetItemInfoInstant(itemID);
+    if (itemType == _itemType) and (itemSubType == _itemSubType) then
+        return true;
+    end
+    if (itemType == classID) and (itemSubType == subClassID) then
+        return true;
+    end
+    return false;
 end
 
 local function CheckAutoLootRules(itemID, isQuestItem, itemQuality)

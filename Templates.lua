@@ -40,6 +40,9 @@ function TbdFancyLootPersonalLootItemMixin:SetLootItem(data)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
             GameTooltip:ClearLines()
             GameTooltip:SetHyperlink(data.link)
+            GameTooltip:AddLine(" ");
+            GameTooltip:AddLine("|cff00BFF3Whitelist item|r: Alt+Right Click");
+            GameTooltip:AddLine("|cff00BFF3Blacklist item|r: Crtl+Right Click");
             GameTooltip:Show()
 
             --DevTools_Dump({data})
